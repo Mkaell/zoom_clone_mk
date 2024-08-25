@@ -7,6 +7,10 @@ import MeetingModal from "./MeetingModal";
 import { Call, useStreamVideoClient } from "@stream-io/video-react-sdk";
 import { useUser } from "@clerk/nextjs";
 import { useToast } from "./ui/use-toast";
+import { Textarea } from "./ui/textarea";
+import Loader from "./Loader";
+import ReactDatePicker from "react-datepicker";
+
 type meetingStateTypes =
 	| "isScheduleMeeting"
 	| "isJoiningMeeting"
@@ -62,6 +66,10 @@ const MeetingTypeList = () => {
 			toast({ title: "Failed to create Meeting" });
 		}
 	};
+
+	if (!client || !user) return <Loader />;
+
+	const meetingLink = `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${callDetail?.id}`;
 	return (
 		<section className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
 			<HomeCard
@@ -92,7 +100,7 @@ const MeetingTypeList = () => {
 				handleClick={() => router.push("/recordings")}
 			/>
 
-			{/* {!callDetail ? (
+			{!callDetail ? (
 				<MeetingModal
 					isOpen={meetingState === "isScheduleMeeting"}
 					onClose={() => setMeetingState(undefined)}
@@ -155,14 +163,14 @@ const MeetingTypeList = () => {
 				buttonText="Join Meeting"
 				handleClick={() => router.push(values.link)}
 			>
-				<Input
+				{/* <Input
 					placeholder="Meeting link"
 					onChange={(e) =>
 						setValues({ ...values, link: e.target.value })
 					}
 					className="border-none bg-dark-3 focus-visible:ring-0 focus-visible:ring-offset-0"
-				/>
-			</MeetingModal> */}
+				/> */}
+			</MeetingModal>
 
 			<MeetingModal
 				isOpen={meetingState === "isInstantMeeting"}
