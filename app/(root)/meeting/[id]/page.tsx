@@ -6,7 +6,7 @@ import { StreamCall, StreamTheme } from "@stream-io/video-react-sdk";
 import { useParams } from "next/navigation";
 
 import { useGetCallById } from "@/hooks/useGetCallById";
-// import Alert from '@/components/Alert';
+import Alert from "@/components/Alert";
 import MeetingSetup from "@/components/MeetingSetup";
 import MeetingRoom from "@/components/MeetingRoom";
 import Loader from "@/components/Loader";
@@ -27,9 +27,12 @@ const MeetingPage = () => {
 		);
 
 	// get more info about custom call type:  https://getstream.io/video/docs/react/guides/configuring-call-types/
-	//   const notAllowed = call.type === 'invited' && (!user || !call.state.members.find((m) => m.user.id === user.id));
+	const notAllowed =
+		call.type === "invited" &&
+		(!user || !call.state.members.find((m) => m.user.id === user.id));
 
-	//   if (notAllowed) return <Alert title="You are not allowed to join this meeting" />;
+	if (notAllowed)
+		return <Alert title="You are not allowed to join this meeting" />;
 
 	return (
 		<main className="h-screen w-full">

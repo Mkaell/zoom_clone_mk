@@ -10,6 +10,7 @@ import { useToast } from "./ui/use-toast";
 import { Textarea } from "./ui/textarea";
 import Loader from "./Loader";
 import ReactDatePicker from "react-datepicker";
+import { Input } from "./ui/input";
 
 type meetingStateTypes =
 	| "isScheduleMeeting"
@@ -55,7 +56,7 @@ const MeetingTypeList = () => {
 				},
 			});
 			setCallDetail(call);
-			if (!values.description) {
+			if (meetingState === "isInstantMeeting") {
 				router.push(`/meeting/${call.id}`);
 			}
 			toast({
@@ -142,7 +143,10 @@ const MeetingTypeList = () => {
 			) : (
 				<MeetingModal
 					isOpen={meetingState === "isScheduleMeeting"}
-					onClose={() => setMeetingState(undefined)}
+					onClose={() => {
+						setMeetingState(undefined);
+						setCallDetail(undefined);
+					}}
 					title="Meeting Created"
 					handleClick={() => {
 						navigator.clipboard.writeText(meetingLink);
@@ -163,13 +167,13 @@ const MeetingTypeList = () => {
 				buttonText="Join Meeting"
 				handleClick={() => router.push(values.link)}
 			>
-				{/* <Input
+				<Input
 					placeholder="Meeting link"
 					onChange={(e) =>
 						setValues({ ...values, link: e.target.value })
 					}
 					className="border-none bg-dark-3 focus-visible:ring-0 focus-visible:ring-offset-0"
-				/> */}
+				/>
 			</MeetingModal>
 
 			<MeetingModal
