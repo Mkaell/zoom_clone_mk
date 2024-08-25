@@ -68,6 +68,12 @@ const MeetingTypeList = () => {
 		}
 	};
 
+	function getMeetingPath(url: string | null): string | null {
+		const match =
+			typeof url === "string" ? url.match(/\/meeting\/.+/) : null;
+		return match ? match[0] : null;
+	}
+
 	if (!client || !user) return <Loader />;
 
 	const meetingLink = `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${callDetail?.id}`;
@@ -165,7 +171,14 @@ const MeetingTypeList = () => {
 				title="Type the link here"
 				className="text-center"
 				buttonText="Join Meeting"
-				handleClick={() => router.push(values.link)}
+				handleClick={() => {
+					const meetingPath = getMeetingPath(values.link);
+					if (meetingPath) {
+						router.push(meetingPath);
+					} else {
+						toast({ title: "Invalid meeting link" });
+					}
+				}}
 			>
 				<Input
 					placeholder="Meeting link"
